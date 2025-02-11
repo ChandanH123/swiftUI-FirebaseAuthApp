@@ -12,7 +12,12 @@ struct SignUpView: View {
     @State private var fullName: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
-    
+    @EnvironmentObject private var authViewModel : AuthViewModel
+
+    private var isValidPassword: Bool {
+        confirmPassword == password
+    }
+
     private var headlineView: some View {
         VStack {
             Text("Please fill all information to create an account.")
@@ -59,14 +64,17 @@ struct SignUpView: View {
         }
     }
     
-    private var isValidPassword: Bool {
-        confirmPassword == password
-    }
-    
     private var createAccountButtonView: some View {
         Button(action: {
-            
-        }, label: {
+            Task {
+                await authViewModel.createUser(
+                    email: email,
+                    fullName: fullName,
+                    password: password
+                )
+            }
+        },
+               label: {
             Text("Create Account")
         })
         .buttonStyle(CapsuleButtonStyle())
