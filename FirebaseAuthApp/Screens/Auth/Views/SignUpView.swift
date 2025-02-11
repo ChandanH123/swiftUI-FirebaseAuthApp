@@ -13,6 +13,7 @@ struct SignUpView: View {
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     @EnvironmentObject private var authViewModel : AuthViewModel
+    @Environment (\.presentationMode) var presentationMode // use to pop the view.
 
     private var isValidPassword: Bool {
         confirmPassword == password
@@ -72,6 +73,11 @@ struct SignUpView: View {
                     fullName: fullName,
                     password: password
                 )
+                
+                // if error is false only then dismiss back to login view otherwise stay on sign up view.
+                if !authViewModel.isError {
+                    presentationMode.wrappedValue.dismiss()
+                }
             }
         },
                label: {
@@ -88,11 +94,12 @@ struct SignUpView: View {
             createAccountButtonView
         }
         .padding(.horizontal)
-        .navigationTitle("Set up your account")
-        .toolbarRole(.editor)
+        .navigationTitle("Set up your account") // will set the navigation title.
+        .toolbarRole(.editor) // will remove back button title.
     }
 }
 
 #Preview {
     SignUpView()
+        .environmentObject(AuthViewModel())
 }

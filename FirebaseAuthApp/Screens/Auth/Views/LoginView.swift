@@ -156,14 +156,16 @@ struct LoginView: View {
                     // bottom view
                     bottomView
                 }
-                .ignoresSafeArea()
-                .padding(.horizontal) // by default is 16 left and right.
-                .padding(.vertical, 8) // 8 top and bottom.
             }
+            .ignoresSafeArea()
+            .padding(.horizontal) // by default is 16 left and right.
+            .padding(.vertical, 8) // 8 top and bottom.
+            .alert("Something went wrong!", isPresented: $authViewModel.isError) {} // will show error when get error.
         }
     }
 }
 
 #Preview {
     LoginView()
+        .environmentObject(AuthViewModel())
 }
